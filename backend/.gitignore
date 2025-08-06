@@ -1,3 +1,58 @@
-# Ignore environment config
-.env
+# ⚙️ Node modules
+node_modules/
 
+# 📦 Build output
+dist/
+build/
+.out/
+.next/
+.cache/
+
+# 🔐 Environment files
+.env
+.env.local
+.env.*.local
+
+# 🧪 Test coverage
+coverage/
+.nyc_output/
+
+# 🧹 Logs & temp
+*.log
+logs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.DS_Store
+*.swp
+*.swo
+*.tmp
+
+# 🐳 Docker artifacts
+docker-compose.override.yml
+*.pid
+
+# 💥 OS & editor junk
+Thumbs.db
+ehthumbs.db
+.idea/
+.vscode/
+*.iml
+
+# 🔧 TypeScript artifacts
+*.tsbuildinfo
+
+# 📦 Package lock (optional, if using yarn/pnpm)
+package-lock.json
+# yarn.lock
+# pnpm-lock.yaml
+
+# 🔍 Lint cache
+.eslintcache
+
+# 🧪 Jest snapshots
+__snapshots__/
+
+# 🔧 Sequelize CLI artifacts
+.sequelize-meta.json
