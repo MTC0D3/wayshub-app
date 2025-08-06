@@ -11,44 +11,37 @@ services:
     volumes:
       - mysql-data:/var/lib/mysql
       - ./mysql-init:/docker-entrypoint-initdb.d
+    ports:
+      - "3306:3306"
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
       timeout: 5s
       retries: 10
-    ports:
-      - "3306:3306"
     networks:
       - wayshub_net
 
   backend:
     build: ./backend
     container_name: wayshub-backend
-    environment:
-      DB_HOST: mysql
-      DB_USER: root
-      DB_PASSWORD: mtc0d3
-      DB_NAME: wayshub_db
-      RESET_ADMIN_PASS: 'true'
-      JWT_PRIVATE_KEY: 951836
-      CLOUD_NAME: dlumdgloz
-      API_KEY: 958682469343893
-      API_SECRET: ujMVhZydB8NHd0z2w13HFwm4EEA
+    env_file:
+      - ./backend/.env
     depends_on:
-      - mysql
+      mysql:
+        condition: service_healthy
     ports:
       - "5000:5000"
     networks:
       - wayshub_net
     command: >
       sh -c "
-      echo '⏳ Waiting for MySQL...' &&
-      npx wait-port mysql:3306 &&
-      echo '✅ Creating database...' &&
-      npx sequelize db:create &&
-      echo '📦 Running migrations...' &&
-      npx sequelize db:migrate &&
-      echo '🚀 Starting backend...' &&
-      npm start
+        echo '⏳ Waiting for MySQL...' &&
+        npx wait-port mysql:3306 &&
+        echo '✅ Creating database...' &&
+        npx sequelize db:create &&
+        echo '📦 Running migrations...' &&
+        npx sequelize db:migrate &&
+        echo '🚀 Starting backend...' &&
+        npm start
       "
 
   frontend:
