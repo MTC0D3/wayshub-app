@@ -22,11 +22,12 @@ jobs:
           fetch-depth: 0 # Mengambil seluruh riwayat commit (bukan shallow clone), penting untuk analisis SonarCloud yang akurat
 
       - name: Run SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@383f7e52eae3ab0510c3cb0e7d9d150bbaeab838 # Menggunakan action SonarCloud dengan full commit SHA untuk keamanan dan stabilitas
+        uses: SonarSource/sonarcloud-github-action@383f7e52eae3ab0510c3cb0e7d9d150bbaeab838 # Full commit SHA untuk keamanan dan stabilitas
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }} # Token autentikasi ke SonarCloud, disimpan aman di GitHub Secrets
         with:
-          args: > # Menggunakan tanda '>' agar argumen multi-baris lebih rapi
-            -Dsonar.qualitygate.wait=true  # Menunggu hasil Quality Gate sebelum menyelesaikan job
+          # Argumen konfigurasi untuk SonarScanner CLI
+          args: >
+            -Dsonar.qualitygate.wait=true  # Tunggu hasil Quality Gate sebelum menyelesaikan job
             -Dsonar.projectKey=MTC0D3_wayshub-app  # Key unik proyek kamu di SonarCloud
             -Dsonar.organization=mtc0d3  # Nama organisasi kamu di SonarCloud
