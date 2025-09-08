@@ -27,7 +27,10 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }} # Token autentikasi ke SonarCloud, disimpan aman di GitHub Secrets
         with:
           # Argumen konfigurasi untuk SonarScanner CLI
+          # 1. Tunggu hasil Quality Gate sebelum menyelesaikan job
+          # 2. Key unik proyek kamu di SonarCloud
+          # 3. Nama organisasi kamu di SonarCloud
           args: >
-            -Dsonar.qualitygate.wait=true  # Tunggu hasil Quality Gate sebelum menyelesaikan job
-            -Dsonar.projectKey=MTC0D3_wayshub-app  # Key unik proyek kamu di SonarCloud
-            -Dsonar.organization=mtc0d3  # Nama organisasi kamu di SonarCloud
+            -Dsonar.qualitygate.wait=true 
+            -Dsonar.projectKey=MTC0D3_wayshub-app  
+            -Dsonar.organization=mtc0d3
