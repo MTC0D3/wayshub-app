@@ -1,28 +1,32 @@
-name: SonarCloud analysis
+name: SonarCloud analysis # Nama workflow yang muncul di tab Actions GitHub
 
-on:
-  push:
+on: # Event pemicu workflow
+  push: # Trigger saat ada push ke branch 'main'
     branches: ["main"]
-  pull_request:
+  pull_request: # Trigger saat ada pull request ke branch 'main'
     branches: ["main"]
-  workflow_dispatch:
+  workflow_dispatch: # Memungkinkan workflow dijalankan manual dari UI GitHub
 
 permissions:
-  pull-requests: read # allows SonarCloud to decorate PRs with analysis results
+  pull-requests: read # Memberikan akses baca ke PR agar SonarCloud bisa menambahkan komentar hasil analisis
 
 jobs:
-  sast-analysis:
-    name: SonarCloud Scan (SAST)
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
+  sast-analysis: # Nama job utama
+    name: SonarCloud Scan (SAST) # Label job yang tampil di UI GitHub Actions
+    runs-on: ubuntu-latest # Menentukan runner yang digunakan (Ubuntu versi terbaru)
+
+    steps: # Langkah-langkah dalam job ini
+      - name: Checkout source code
+        uses: actions/checkout@v3 # Mengambil source code dari repo
         with:
-          fetch-depth: 0 # Shallow clones should be disabled for a better relevancy of analysis
-      - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@383f7e52eae3ab0510c3cb0e7d9d150bbaeab838
+          fetch-depth: 0 # Mengambil seluruh riwayat commit (bukan shallow clone), penting untuk analisis SonarCloud yang akurat
+
+      - name: Run SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@383f7e52eae3ab0510c3cb0e7d9d150bbaeab838 # Menggunakan action SonarCloud dengan full commit SHA untuk keamanan dan stabilitas
         env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }} # Token autentikasi ke SonarCloud, disimpan aman di GitHub Secrets
         with:
-          args: -Dsonar.qualitygate.wait=true
-            -Dsonar.projectKey=MTC0D3_wayshub-app
-            -Dsonar.organization=mtc0d3
+          args: > # Menggunakan tanda '>' agar argumen multi-baris lebih rapi
+            -Dsonar.qualitygate.wait=true  # Menunggu hasil Quality Gate sebelum menyelesaikan job
+            -Dsonar.projectKey=MTC0D3_wayshub-app  # Key unik proyek kamu di SonarCloud
+            -Dsonar.organization=mtc0d3  # Nama organisasi kamu di SonarCloud
